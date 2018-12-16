@@ -22,8 +22,7 @@ int size;
 int* priority;
 int readerCounter = 0;
 bool noReaders = false;
-ofstream oFile;//archivo de salida
-string oFileName;//nombre definido por usuario
+ofstream oFile;
 
 void useSharedResource(char type, int id, int time){
 	this_thread::sleep_for(chrono::milliseconds(time));
@@ -49,7 +48,7 @@ bool waitForTurn(int id){
 	return false;
 }
 
-void addOneActive(){
+void addOneWaiting(){
 	for(int i = 0; i < size; ++i) if(priority[i] != -1) ++priority[i];
 }
 
@@ -67,7 +66,7 @@ void writer(int id, int time){
 	}
 	priorityMutex.lock();
 	priority[id-1] = -1;
-	addOneActive();
+	addOneWaiting();
 	priorityMutex.unlock();
 
 	useSharedResource('E',id,time);
@@ -109,7 +108,7 @@ void reader(int id, int time){
 
 	priorityMutex.lock();
 	priority[id-1] = -1;
-	addOneActive();
+	addOneWaiting();
 	priorityMutex.unlock();
 	counterVariable.notify_one();
 	counterLock.unlock();
@@ -154,11 +153,52 @@ void reader(int id, int time){
 }
 
 void createOutput(){
-	//crear archivo de salida con nombre dado o default
+	cout << "Desea cambiar el nombre del archivo de salida?(Y/N)\n";
+	string response;
+	cin >> response;
+	if(response == "y" || response == "Y") {
+		string nombre;
+		cout << "Ingrese el nombre del archivo de salida (sin la extension).";
+		cin >> nombre;
+		oFile.open(nombre + ".txt");
+	}
+	else oFile.open(DEFAULT_OUTPUT_NAME);
 }
 
 void readFile(){
-	//leer archivo entrada
+	ifstream iFile(FILENAME, ios::in);
+	if(iFile.fail()) {
+		cout << "No se pudo abrir el archivo!"".\n";
+		getchar();
+		exit(1);
+	}
+
+	createOutput();
+	string sSize;
+	getline(iFile, sSize);
+	size = stoi(sSize);
+	priority = new int [size];
+	for(int i = 0; i < size; ++i) priority[i] = -1;
+	threads = new thread[size];
+	string threadInfo;
+	char type;
+	string sId;
+	string sTime;
+
+	for(int i = 0; i < size; ++i){
+		getline(iFile, threadInfo);
+		type = threadInfo[0];
+		int j;
+		for(j = 2; threadInfo[j] != ' '; ++j) sId += threadInfo[j];
+		++j;
+		for(j; j < threadInfo.size(); ++j) sTime += threadInfo[j];
+		if(type == 'L') threads[i] = thread(reader,stoi(sId),stoi(sTime));
+		else threads[i] = thread(writer,stoi(sId),stoi(sTime));
+		threadInfo.clear();
+		sId.clear();
+		sTime.clear();
+	}
+	iFile.close();
 }
 
 int main() {

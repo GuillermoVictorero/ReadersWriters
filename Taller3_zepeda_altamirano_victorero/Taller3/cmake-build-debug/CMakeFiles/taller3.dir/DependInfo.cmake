@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/Guillermo/CLionProjects/NUCLEAR/Taller3/Taller3/main.cpp" "C:/Users/Guillermo/CLionProjects/NUCLEAR/Taller3/Taller3/cmake-build-debug/CMakeFiles/taller3.dir/main.cpp.obj"
+  "C:/Users/Guillermo/Documents/GitHub/ReadersWriters/Taller3_zepeda_altamirano_victorero/Taller3/main.cpp" "C:/Users/Guillermo/Documents/GitHub/ReadersWriters/Taller3_zepeda_altamirano_victorero/Taller3/cmake-build-debug/CMakeFiles/taller3.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
