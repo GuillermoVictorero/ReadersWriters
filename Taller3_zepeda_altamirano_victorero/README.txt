@@ -1,7 +1,7 @@
 Como compilar
 --------------
 Utilizando MinGW en su PATH de sistema, ubiquese en el directorio donde se encuentran los archivos de codigo fuente (con extension .cpp) y compilelos de la siguiente manera:
-g++ main.cpp -std=c++11 -static-libgcc -static -lpthread -o lectoresEscritoes.exe (Para el ejecutable puede escoger otro nombre o direccion si es que lo desea. Agregue los comandos "-static" si desea utilizar esta aplicacion en sistemas que no tengan estas librerias).
+g++ main.cpp -std=c++11 -static-libgcc -static -lpthread -o lectoresEscritores.exe (Para el ejecutable puede escoger otro nombre o direccion si es que lo desea. Agregue los comandos "-static" si desea utilizar esta aplicacion en sistemas que no tengan estas librerias).
 
 Como utilizar
 -------------

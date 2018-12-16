@@ -49,12 +49,12 @@ bool waitForTurn(int id){
 }
 
 void addOneWaiting(){
-	for(int i = 0; i < size; ++i) if(priority[i] != -1) ++priority[i];
+	for(int i = 0; i < size; ++i) if(priority[i] != 0) ++priority[i];
 }
 
 void writer(int id, int time){
 	priorityMutex.lock();
-	priority[id-1] = 0;
+	priority[id-1] = 1;
 	priorityMutex.unlock();
 
 	unique_lock<mutex> writerLock(writerMutex);
@@ -65,7 +65,7 @@ void writer(int id, int time){
 		firstTime = false;
 	}
 	priorityMutex.lock();
-	priority[id-1] = -1;
+	priority[id-1] = 0;
 	addOneWaiting();
 	priorityMutex.unlock();
 
@@ -80,7 +80,7 @@ void writer(int id, int time){
 void reader(int id, int time){
 
 	priorityMutex.lock();
-	priority[id-1] = 0;
+	priority[id-1] = 1;
 	priorityMutex.unlock();
 
 
@@ -107,7 +107,7 @@ void reader(int id, int time){
 	}
 
 	priorityMutex.lock();
-	priority[id-1] = -1;
+	priority[id-1] = 0;
 	addOneWaiting();
 	priorityMutex.unlock();
 	counterVariable.notify_one();
@@ -178,7 +178,7 @@ void readFile(){
 	getline(iFile, sSize);
 	size = stoi(sSize);
 	priority = new int [size];
-	for(int i = 0; i < size; ++i) priority[i] = -1;
+	for(int i = 0; i < size; ++i) priority[i] = 0;
 	threads = new thread[size];
 	string threadInfo;
 	char type;
